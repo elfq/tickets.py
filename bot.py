@@ -99,7 +99,7 @@ class TicketBot(commands.Cog):
     await ctx.reply(embed=embed)
 
   @config.command()
-  @command.has_permissions(manage_guild=True)
+  @commands.has_permissions(manage_guild=True)
   async def ticket_logs(self, ctx: commands.Context, ID: int):
     self.db.execute("UPDATE Tickets SET logs=? WHERE guild_id=?", (ID, ctx.guild.id))
     await ctx.reply(f"✅ Successfully changed the logs channel to <#{self.logs(ctx.guild.id)}>.")
