@@ -81,13 +81,17 @@ class TicketBot(commands.Cog):
      title = "Ticket Logs",
      description = f"**Closed by:** {ctx.author}", 
      color = discord.Colour.blue())
-   channel = discord.utils.get(ctx.guild.channels, name="ticket-logs")
+   channel = self.bot.get_channel(self.log_id(ctx.guild.id))
    transcript = await chat_exporter.export(ctx.channel, limit=1000)
    transcript_file = discord.File(io.BytesIO(transcript.encode()),
    filename=f"transcript-{ctx.channel.name}.html")
    await ctx.channel.delete()
    await channel.send(embed=embed, file=transcript_file)
    # TODO: custom checks to make sure the close command is ran in the ticket category.
+
+  @commands.group(aliases=["configuration"])
+  async def config(self, ctx: commands.Context):
+
 
     
 
