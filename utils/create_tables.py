@@ -7,7 +7,6 @@ class Tickets(db.Table):
     category = db.Column("BIGINT", nullable=False)
     tickets = db.Column("INT", nullable=False)
 
-
 def creation(debug: bool = False):
     """ Create tables or add missing columns to tables """
     failed = False

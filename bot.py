@@ -1,7 +1,10 @@
 import discord
 from discord.ext import commands
 from utils import create_tables, sqlite
+import os
 from os import environ as env
+import io
+import chat_exporter
 
 tables = create_tables.creation(debug=True)
 if not tables:
@@ -63,10 +66,29 @@ class TicketBot(commands.Cog):
     )
     await ctx.author.send(embed=embed)
     channel_msg = self.bot.get_channel(ticket_channel_id.id)
-    await channel_msg.send(f"A ticket has been started by {ctx.author}, reason: `{reason}`.")
+    embed = discord.Embed(
+      title = "Ticket Started!",
+      description = f"**Author:** {ctx.author.mention}\n**Reason:** ```{reason}```",
+      color = discord.Colour.blue())
+    await channel_msg.send(content = "@here", embed=embed)
+    # TODO: mention/start message configurations.
+
 
   @commands.command()
+  @commands.has_permissions(manage_channels=True)
   async def close(self, ctx: commands.Context):
+   embed = discord.Embed(
+     title = "Ticket Logs",
+     description = f"**Closed by:** {ctx.author}", 
+     color = discord.Colour.blue())
+   channel = discord.utils.get(ctx.guild.channels, name="ticket-logs")
+   transcript = await chat_exporter.export(ctx.channel, limit=1000)
+   transcript_file = discord.File(io.BytesIO(transcript.encode()),
+   filename=f"transcript-{ctx.channel.name}.html")
+   await ctx.channel.delete()
+   await channel.send(embed=embed, file=transcript_file)
+   # TODO: custom checks to make sure the close command is ran in the ticket category.
+
     
 
 
