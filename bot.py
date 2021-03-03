@@ -91,6 +91,17 @@ class TicketBot(commands.Cog):
 
   @commands.group(aliases=["configuration"])
   async def config(self, ctx: commands.Context):
+    embed = discord.Embed(
+      title = "Current Configurations",
+      decription = "`ticket_logs <channel_ID>` - Change the channel where logs will be sent.",
+      color = discord.Colour.blue()
+    )
+    await ctx.reply(embed=embed)
+
+  @config.command()
+  async def ticket_logs(self, ctx: commands.Context, ID: int):
+    self.db.execute("UPDATE Tickets SET logs=? WHERE guild_id=?", ID, ctx.guild.id))
+
 
 
     
