@@ -89,20 +89,20 @@ class TicketBot(commands.Cog):
    await channel.send(embed=embed, file=transcript_file)
    # TODO: custom checks to make sure the close command is ran in the ticket category.
 
-  @commands.group(aliases=["configuration"])
+  @commands.group(invoke_without_command=True, aliases=["configuration"])
   async def config(self, ctx: commands.Context):
     embed = discord.Embed(
-      title = "Current Configurations",
-      decription = "`ticket_logs <channel_ID>` - Change the channel where logs will be sent.",
+      title = "Configurations",
+      description = "`ticket_logs` - Change the channel where ticket logs will be sent after the ticket is closed.\n```t!config ticket_logs 816559638030843905```",
       color = discord.Colour.blue()
     )
     await ctx.reply(embed=embed)
 
-  @config.command()
+  @config.command(name="tickets_logs", aliases= ["ticket_logs"])
   @commands.has_permissions(manage_guild=True)
-  async def ticket_logs(self, ctx: commands.Context, ID: int):
+  async def ticket_logs_(self, ctx: commands.Context, ID: int):
     self.db.execute("UPDATE Tickets SET logs=? WHERE guild_id=?", (ID, ctx.guild.id))
-    await ctx.reply(f"✅ Successfully changed the logs channel to <#{self.logs(ctx.guild.id)}>.")
+    await ctx.reply(f"✅ Successfully changed the logs channel to <#{self.log_id(ctx.guild.id)}>.")
 
 
 
