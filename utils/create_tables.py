@@ -5,6 +5,7 @@ class Tickets(db.Table):
     guild_id = db.Column("BIGINT", nullable=False, primary_key=True)
     logs = db.Column("BIGINT", nullable=False)
     category = db.Column("BIGINT", nullable=False)
+    tickets = db.Column("INT", nullable=False)
 
 
 def creation(debug: bool = False):
